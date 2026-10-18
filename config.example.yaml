@@ -1,0 +1,45 @@
+server:
+  host: "127.0.0.1"
+  port: 8895
+
+# Egress provider: cloudflare | vercel | netlify | direct
+egress:
+  provider: "cloudflare"
+
+  cloudflare:
+    # 9router endpoint with Cloudflare serverless relay configured
+    relay_url: "http://127.0.0.1:20128"
+    api_key: "YOUR_9ROUTER_API_KEY"
+    # Model prefix for OpenCode free models (oc/ or ocg/)
+    model_prefix: "oc/"
+
+  vercel:
+    relay_url: "https://your-app.vercel.app/api/relay"
+    secret: "YOUR_RELAY_SECRET"
+
+  netlify:
+    relay_url: "https://your-app.netlify.app/.netlify/functions/relay"
+    secret: "YOUR_RELAY_SECRET"
+
+  # direct: no relay, uses local machine IP
+  # useful for testing or when you have a clean residential IP
+
+retry:
+  max_retries: 10
+  initial_delay: 5.0
+  max_delay: 60.0
+  backoff_multiplier: 2.0
+  # Only retry these status codes
+  retry_on: [429]
+  # Also retry on these error patterns in response body
+  retry_on_body_contains:
+    - "FreeUsageLimitError"
+    - "Rate limit exceeded"
+
+queue:
+  enabled: true
+  min_interval: 2.0  # minimum seconds between requests
+
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  format: "%(asctime)s [%(levelname)s] %(message)s"
