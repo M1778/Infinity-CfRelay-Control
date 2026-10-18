@@ -1,0 +1,11 @@
+services:
+  cf-proxy-retry:
+    build: .
+    container_name: cf-proxy-retry
+    ports:
+      - "8895:8895"
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+    restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
